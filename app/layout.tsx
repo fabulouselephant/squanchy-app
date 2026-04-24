@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, PT_Sans } from "next/font/google";
 import ReactQueryProvider from './utils/providers/ReactQueryProvider'
+import { MuiThemeProvider } from './utils/providers/ThemeProvider'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,6 +13,12 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+const ptSans = PT_Sans({                                                                                                                                                                               
+  weight: ['400', '700'],
+  subsets: ['latin'],                                                                                                                                                                                
+  variable: '--font-pt-sans',
+});    
 
 export const metadata: Metadata = {
   title: "Squanchy App",
@@ -25,12 +33,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${ptSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
+      <AppRouterCacheProvider>
+        <MuiThemeProvider>
+          <ReactQueryProvider>
+            {children}
+          </ReactQueryProvider>
+        </MuiThemeProvider>
+        </AppRouterCacheProvider>
         </body>
     </html>
   );
