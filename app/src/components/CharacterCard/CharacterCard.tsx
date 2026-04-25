@@ -30,7 +30,6 @@ export const CharacterCard = () => {
     const updated = { ...cachedCharacters, [searchId]: data }
     setCachedCharacters(updated)
     localStorage.setItem('character-data', JSON.stringify(updated))
-
     }
     
   }, [data, searchId])

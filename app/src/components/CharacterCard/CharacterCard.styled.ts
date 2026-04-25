@@ -59,6 +59,7 @@ export const ChachedCharacter = styled(Box, {
   padding: '2px',
   border: bordered ? '1px solid blue' : '',
   borderRadius: '5px',
+  position: 'relative',
 }))
 
 export const MainImageContainer = styled(Box)(({theme}) => ({

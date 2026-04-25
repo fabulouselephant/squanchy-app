@@ -7,26 +7,6 @@ vi.mock('next/image', () => ({
   default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
 }))
 
-vi.mock('./CharacterCard.styled', () => ({
-    Card: ({ children }: any) => <div>{children}</div>,
-    CharacterCard: ({ children }: any) => <div>{children}</div>,
-    ActionBar: ({ children }: any) => <div>{children}</div>,
-    SearchInput: ({ value, onChange, label, slotProps }: any) => (
-        <div>
-            <input aria-label={label} value={value} onChange={onChange} />
-            {slotProps?.input?.endAdornment}
-        </div>
-    ),
-    SearchInputContainer: ({ children }: any) => <div>{children}</div>,
-    MainImageContainer: ({ children }: any) => <div>{children}</div>,
-    CharacterDescription: ({ children }: any) => <div>{children}</div>,
-    CharacterDescripionLine: ({ children }: any) => <span>{children}</span>,
-    ChachedCharacter: ({ children }: any) => <div>{children}</div>,
-    CachedCharactersContainer: ({ children }: any) => <div>{children}</div>,
-    ErrorMessage: ({ children }: any) => <p>{children}</p>,
-}))
-
-
 const mockCharacter = {
   id: 1,
   name: 'Rick Sanchez',
