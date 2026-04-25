@@ -1,6 +1,18 @@
 import { Typography, Stack, Box, TextField } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
+export const Card = styled(Stack)(({theme}) => ({
+    flexDirection: 'row', 
+    margin: '20px 150px',
+    justifyContent:'space-between',
+    padding: '113px 64px 110px 113px',
+    [theme.breakpoints.down('md')]: {
+        flexDirection: 'column',
+        margin: '10px',
+        padding: '10px',
+      }, 
+}))
+
 export const CharacterDescripionLine = styled(Typography, {
   shouldForwardProp: (prop) => prop !== 'greytext',
 })<{ greytext?: boolean }>(({ greytext }) => ({
@@ -11,8 +23,6 @@ export const CharacterDescripionLine = styled(Typography, {
 
 export const CharacterCard = styled(Box)(({theme}) => ({
   display: 'flex',
-  width: '100%',
-  margin: '64px 113px 110px 113px',
   flexDirection: 'column',
   [theme.breakpoints.down('md')]: {
     margin: '32px 24px',
@@ -24,17 +34,13 @@ export const CharacterCard = styled(Box)(({theme}) => ({
   },              
 }))
 
-export const ActionBar = styled(Stack)(({theme}) =>({
+export const ActionBar = styled(Box)(({theme}) =>({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent: 'space-between',
   [theme.breakpoints.down('md')]: {
    width: '100%',
-  },                                                                                                                                                                                                   
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-  },              
+  },           
 }))
 
 export const CharacterDescription = styled(Stack)({
@@ -48,7 +54,6 @@ export const ChachedCharacter = styled(Box, {
 })<{ bordered?: boolean }>(({ bordered }) => ({
   height: '60px',
   width: '60px',
-  overflow: 'hidden',
   boxSizing: 'content-box',
   margin: '5px',
   padding: '2px',
@@ -82,3 +87,14 @@ export const ErrorMessage = styled(Typography)({
   fontSize: '32px',
   color: 'red',
 })
+
+export const CachedCharactersContainer = styled(Stack)(({theme}) =>({
+    height: '500px',
+    flexDirection: 'column',
+    overflow: 'scroll',
+    [theme.breakpoints.down('md')]: {
+     flexDirection: 'row',
+     width: '100%',
+     margin: 'auto',
+    },
+  }))

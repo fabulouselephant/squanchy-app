@@ -7,22 +7,25 @@ vi.mock('next/image', () => ({
   default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
 }))
 
-vi.mock('./CharachterCard.styled', () => ({
-  CharachterCard: ({ children }: any) => <div>{children}</div>,
-  ActionBar: ({ children }: any) => <div>{children}</div>,
-  SearchInput: ({ value, onChange, label, slotProps }: any) => (
-    <div>
-      <input aria-label={label} value={value} onChange={onChange} />
-      {slotProps?.input?.endAdornment}
-    </div>
-  ),
-  SearchInputContainer: ({ children }: any) => <div>{children}</div>,
-  MainImageContainer: ({ children }: any) => <div>{children}</div>,
-  CharachterDescription: ({ children }: any) => <div>{children}</div>,
-  CharachterDescripionLine: ({ children }: any) => <span>{children}</span>,
-  ChachedCharacter: ({ children }: any) => <div>{children}</div>,
-  ErrorMessage: ({ children }: any) => <p>{children}</p>,
+vi.mock('./CharacterCard.styled', () => ({
+    Card: ({ children }: any) => <div>{children}</div>,
+    CharacterCard: ({ children }: any) => <div>{children}</div>,
+    ActionBar: ({ children }: any) => <div>{children}</div>,
+    SearchInput: ({ value, onChange, label, slotProps }: any) => (
+        <div>
+            <input aria-label={label} value={value} onChange={onChange} />
+            {slotProps?.input?.endAdornment}
+        </div>
+    ),
+    SearchInputContainer: ({ children }: any) => <div>{children}</div>,
+    MainImageContainer: ({ children }: any) => <div>{children}</div>,
+    CharacterDescription: ({ children }: any) => <div>{children}</div>,
+    CharacterDescripionLine: ({ children }: any) => <span>{children}</span>,
+    ChachedCharacter: ({ children }: any) => <div>{children}</div>,
+    CachedCharactersContainer: ({ children }: any) => <div>{children}</div>,
+    ErrorMessage: ({ children }: any) => <p>{children}</p>,
 }))
+
 
 const mockCharacter = {
   id: 1,
@@ -50,8 +53,8 @@ describe('CharachterCard', () => {
 
   test('renders search input and buttons', () => {
     render(<CharacterCard />, { wrapper })
-    expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument()
+    expect(screen.getByTestId('search-btn')).toBeInTheDocument()
+    expect(screen.getByTestId('clear-all-btn')).toBeInTheDocument()
     expect(screen.getByLabelText('Enter any number')).toBeInTheDocument()
   })
 
@@ -64,9 +67,9 @@ describe('CharachterCard', () => {
     render(<CharacterCard />, { wrapper })
 
     fireEvent.change(screen.getByLabelText('Enter any number'), { target: { value: '1' } })
-    fireEvent.click(screen.getByRole('button', { name: /search/i }))
+    fireEvent.click(screen.getByTestId('search-btn'))
 
-    expect(await screen.findByText('Rick Sanchez')).toBeInTheDocument()
+    expect(await screen.findByTestId('character-name')).toBeInTheDocument()
   })
 
   test('loads cached characters from localStorage on mount', () => {
@@ -81,8 +84,21 @@ describe('CharachterCard', () => {
     localStorage.setItem('character-data', JSON.stringify({ '1': mockCharacter }))
 
     render(<CharacterCard />, { wrapper })
-    fireEvent.click(screen.getByRole('button', { name: /clear all/i }))
-
+    fireEvent.click(screen.getByTestId('clear-all-btn'))
     expect(localStorage.getItem('character-data')).toBeNull()
+  })
+
+  test('returns error when there is no character on this id', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+        ok: false,
+        json: () => Promise.resolve({ error: 'Character not found' }),
+      })
+  
+      render(<CharacterCard />, { wrapper })
+  
+      fireEvent.change(screen.getByLabelText('Enter any number'), { target: { value: '18999' } })
+      fireEvent.click(screen.getByTestId('search-btn'))
+  
+      expect(await screen.findByText('Character not found')).toBeInTheDocument()
   })
 })

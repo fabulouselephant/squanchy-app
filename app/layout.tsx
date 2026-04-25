@@ -1,18 +1,8 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono, PT_Sans } from 'next/font/google'
+import { PT_Sans } from 'next/font/google'
 import ReactQueryProvider from './utils/providers/ReactQueryProvider'
 import { MuiThemeProvider } from './utils/providers/ThemeProvider'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
 
 const ptSans = PT_Sans({
   weight: ['400', '700'],
@@ -31,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${ptSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${ptSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <AppRouterCacheProvider>
           <MuiThemeProvider>

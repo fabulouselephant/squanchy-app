@@ -27,13 +27,9 @@ export const CharacterCard = () => {
 
   useEffect(() => {
     if (data && searchId) {
-      const existing = Object.entries(cachedCharacters).filter(([id]) => id !== searchId)
-      const updatedCachedCharacters = Object.fromEntries([...existing, [searchId, data]].slice(-3)) as Record<
-        string,
-        ICharacter
-      >
-      setCachedCharacters(updatedCachedCharacters)
-      localStorage.setItem('character-data', JSON.stringify(updatedCachedCharacters))
+    const updated = { ...cachedCharacters, [searchId]: data }
+    setCachedCharacters(updated)
+      localStorage.setItem('character-data', JSON.stringify(updated))
     }
   }, [data, searchId])
 
@@ -42,21 +38,23 @@ export const CharacterCard = () => {
     if (stored) setCachedCharacters(JSON.parse(stored) as Record<string, ICharacter>)
   }, [])
 
-  const clearCahce = () => {
+  const clearCache = () => {
     setCachedCharacters({})
     setCharacterId(null)
     setSearchId(null)
-    localStorage.clear()
+    localStorage.removeItem('character-data')
   }
 
-  const displayData: ICharacter | undefined = searchId !== null ? cachedCharacters[searchId] : data
+  const displayData: ICharacter | undefined = characterId !== null ? cachedCharacters[characterId] : data
 
   return (
-    <Stack component="section" sx={{ flexDirection: 'row', width: '100%' }}>
+    <$.Card>
       <$.CharacterCard>
         <$.ActionBar>
           <$.SearchInputContainer>
             <$.SearchInput
+              data-testid="search-input"
+              disabled={isLoading}
               value={characterId ?? ''}
               onChange={(e) => {
                 setCharacterId(e.target.value)
@@ -67,7 +65,7 @@ export const CharacterCard = () => {
                 input: {
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Button variant="text" onClick={() => setSearchId(characterId)} disabled={isLoading}>
+                      <Button data-testid="search-btn" variant="text" onClick={() => setSearchId(characterId)} disabled={isLoading}>
                         Search
                       </Button>
                     </InputAdornment>
@@ -94,10 +92,10 @@ export const CharacterCard = () => {
             )}
           </$.MainImageContainer>
 
-          <Box sx={{ margin: { xs: '20px 0', md: '50px' }, flex: 1 }}>
+          <Box sx={{ margin: { xs: '20px 0', md: '50px' }, flex: 1, minWidth: 0 }}>
             {displayData ? (
               <>
-                <Typography sx={{ fontWeight: 700, fontSize: '32px' }}>{displayData?.name}</Typography>
+                <Typography data-testid="character-name" sx={{ fontWeight: 700, fontSize: '32px' }}>{displayData?.name}</Typography>
                 <$.CharacterDescription>
                   <$.CharacterDescripionLine greytext>Species</$.CharacterDescripionLine>
                   <$.CharacterDescripionLine>{displayData?.species}</$.CharacterDescripionLine>
@@ -132,40 +130,40 @@ export const CharacterCard = () => {
                 </$.CharacterDescription>
               </>
             ) : error ? (
-              <$.ErrorMessage>Character not found</$.ErrorMessage>
+              <$.ErrorMessage data-testid="error-message">Character not found</$.ErrorMessage>
             ) : null}
           </Box>
 
-          {Object.keys(cachedCharacters).length > 0 && (
-            <Stack direction={{ sx: 'row', md: 'row', lg: 'column' }}>
-                <Button onClick={clearCahce} sx={{ fontStyle: 'italic', alignSelf: 'end' }}>
-                    Clear All
-                </Button>
-              {Object.values(cachedCharacters)
-                .reverse()
-                .splice(0, 3)
-                .map((character: ICharacter) => (
-                  <$.ChachedCharacter
-                    key={character.id}
-                    bordered={String(character.id) === characterId || String(character.id) === searchId}
-                  >
-                    <Image
-                      onClick={() => {
-                        setCharacterId(String(character.id))
-                        setSearchId(String(character.id))
-                      }}
-                      src={character.image}
-                      alt="charachter"
-                      width={60}
-                      height={60}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </$.ChachedCharacter>
-                ))}
-            </Stack>
-          )}
         </Stack>
       </$.CharacterCard>
-    </Stack>
+            <Stack direction={{ sx: 'row', md: 'row', lg: 'column', }} sx={{mt:2}}>
+                <Button data-testid="clear-all-btn" onClick={clearCache} sx={{ fontStyle: 'italic', alignSelf: 'start' }}>
+                    Clear All
+                </Button>
+                {Object.keys(cachedCharacters).length > 0 && (
+                    <$.CachedCharactersContainer>
+                    {Object.values(cachedCharacters)
+                        .map((character: ICharacter) => (
+                        <$.ChachedCharacter
+                            key={character.id}
+                            bordered={String(character.id) === characterId || String(character.id) === searchId}
+                        >
+                            <Image
+                            onClick={() => {
+                                setCharacterId(String(character.id))
+                                setSearchId(String(character.id))
+                            }}
+                            src={character.image}
+                            alt="charachter"
+                            width={60}
+                            height={60}
+                            style={{ objectFit: 'cover' }}
+                            />
+                        </$.ChachedCharacter>
+                    ))}
+                </$.CachedCharactersContainer>
+            )}
+            </Stack>
+    </$.Card>
   )
 }
