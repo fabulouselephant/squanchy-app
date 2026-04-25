@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${ptSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+      <body>
         <AppRouterCacheProvider>
           <MuiThemeProvider>
             <ReactQueryProvider>{children}</ReactQueryProvider>

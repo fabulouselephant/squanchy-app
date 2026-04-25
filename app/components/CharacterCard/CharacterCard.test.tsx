@@ -2,9 +2,35 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { CharacterCard } from './CharacterCard'
+import { ImageProps } from 'next/image'
 
 vi.mock('next/image', () => ({
   default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
+}))
+
+vi.mock('./CharacterCard.styled', () => ({
+  Card: ({ children }: any) => <div>{children}</div>,
+  CharacterCard: ({ children }: any) => <div>{children}</div>,
+  ActionBar: ({ children }: any) => <div>{children}</div>,
+  SearchInputContainer: ({ children }: any) => <div>{children}</div>,
+  SearchInput: ({ value, onChange, label, slotProps }: any) => (
+    <div>
+      <input aria-label={label} value={value} onChange={onChange} />
+      {slotProps?.input?.endAdornment}
+    </div>
+  ),
+}))
+
+vi.mock('./components/CachedCharacters/CachedCharacters.styled', () => ({
+  CachedCharactersContainer: ({ children }: any) => <div>{children}</div>,
+  CachedCharacter: ({ children }: any) => <div>{children}</div>,
+}))
+
+vi.mock('./components/CharacterDescription/CharactedDescription.styled', () => ({
+  CharacterDescripionLine: ({ children }: any) => <span>{children}</span>,
+  CharacterDescription: ({ children }: any) => <div>{children}</div>,
+  MainImageContainer: ({ children }: any) => <div>{children}</div>,
+  ErrorMessage: ({ children }: any) => <p>{children}</p>,
 }))
 
 const mockCharacter = {
@@ -57,7 +83,7 @@ describe('CharachterCard', () => {
 
     render(<CharacterCard />, { wrapper })
 
-    expect(screen.getAllByAltText('charachter')[0]).toBeInTheDocument()
+    expect(screen.getAllByAltText('character')[0]).toBeInTheDocument()
   })
 
   test('clears cache on Clear All click', () => {
