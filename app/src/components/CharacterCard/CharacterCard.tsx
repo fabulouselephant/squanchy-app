@@ -29,8 +29,10 @@ export const CharacterCard = () => {
     if (data && searchId) {
     const updated = { ...cachedCharacters, [searchId]: data }
     setCachedCharacters(updated)
-      localStorage.setItem('character-data', JSON.stringify(updated))
+    localStorage.setItem('character-data', JSON.stringify(updated))
+
     }
+    
   }, [data, searchId])
 
   useEffect(() => {
@@ -58,6 +60,7 @@ export const CharacterCard = () => {
               value={characterId ?? ''}
               onChange={(e) => {
                 setCharacterId(e.target.value)
+                setSearchId('')
               }}
               label="Enter any number"
               variant="standard"
@@ -79,7 +82,7 @@ export const CharacterCard = () => {
         <Stack direction={{ xs: 'column', md: 'row' }}>
           <$.MainImageContainer>
             {isLoading ? (
-              <Box sx={{ display: 'flex' }}>
+              <Box sx={{ display: 'flex', height: '100%', }}>
                 <CircularProgress sx={{ m: 'auto' }} aria-label="Loading…" />
               </Box>
             ) : (
@@ -157,7 +160,7 @@ export const CharacterCard = () => {
                             alt="charachter"
                             width={60}
                             height={60}
-                            style={{ objectFit: 'cover' }}
+                            style={{ objectFit: 'cover', opacity: String(character.id) === characterId || String(character.id) === searchId ? 1 : 0.5 }}
                             />
                         </$.ChachedCharacter>
                     ))}
