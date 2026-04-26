@@ -1,15 +1,14 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { CharacterCard } from './CharacterCard'
-import { ImageProps } from 'next/image'
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
+  default: ({ src, alt, onClick }:any ) => <img src={src} alt={alt} onClick={onClick} />,
 }))
 
 vi.mock('./CharacterCard.styled', () => ({
-  Card: ({ children }: any) => <div>{children}</div>,
+  Card: ({ children }:any) => <div>{children}</div>,
   CharacterCard: ({ children }: any) => <div>{children}</div>,
   ActionBar: ({ children }: any) => <div>{children}</div>,
   SearchInputContainer: ({ children }: any) => <div>{children}</div>,

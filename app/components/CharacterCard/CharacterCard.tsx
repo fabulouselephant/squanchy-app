@@ -1,7 +1,7 @@
 'use client'
 
 import { InputAdornment, Button } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ICharacter } from '../../types/character'
 import {CharacterDescription} from './components/CharacterDescription/CharacterDescription'
@@ -9,7 +9,14 @@ import { CachedCharacters } from './components/CachedCharacters/CachedCharacters
 import * as $ from './CharacterCard.styled'
 
 export const CharacterCard = () => {
-  const [cachedCharacters, setCachedCharacters] = useState<Record<string, ICharacter>>({})
+  const [cachedCharacters, setCachedCharacters] = useState<Record<string, ICharacter>>(() => {
+    try {
+      const stored = localStorage.getItem('character-data')
+      return stored ? (JSON.parse(stored) as Record<string, ICharacter>) : {}
+    } catch {
+      return {}
+    }
+  })
 
   const [characterId, setCharacterId] = useState<string | null>(null)
   const [searchId, setSearchId] = useState<string | null>(null)
@@ -24,26 +31,17 @@ export const CharacterCard = () => {
         return res.json()
       }),
     enabled: !!searchId && !cachedCharacters[searchId],
+    onSuccess: (fetchedData) => {
+      if (searchId && fetchedData) {
+        setCachedCharacters((prev) => {
+          const updated = { ...prev, [searchId]: fetchedData }
+          localStorage.setItem('character-data', JSON.stringify(updated))
+          return updated
+        })
+      }
+    },
   })
 
-  useEffect(() => {
-    if (data && searchId) {
-      const updated = { ...cachedCharacters, [searchId]: data }
-      setCachedCharacters(updated)
-      localStorage.setItem('character-data', JSON.stringify(updated))
-    }
-  }, [data, searchId])
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('character-data')
-      if (stored) {
-        setCachedCharacters(JSON.parse(stored) as Record<string, ICharacter>)
-      }
-    } catch (error) {
-      throw error
-    }
-  }, [])
 
   const displayData: ICharacter | undefined = characterId !== null ? cachedCharacters[characterId] : data
 
