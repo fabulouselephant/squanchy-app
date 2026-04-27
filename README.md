@@ -16,8 +16,15 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can run test using
+To run unit test using
 
 ```bash
  pnpm vitest
 ```
+To run e2e test
+
+```bash
+pnpm cypress open
+```
+click "E2E testing, click "Start E2E Testing in Chrome"
+click check_squanchy-app.spec.cy.ts 

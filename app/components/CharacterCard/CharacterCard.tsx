@@ -42,7 +42,7 @@ export const CharacterCard = () => {
     },
   })
 
-  const displayData: ICharacter | undefined = characterId !== null ? cachedCharacters[characterId] : data
+  const displayData = characterId !== null ? cachedCharacters[characterId] : data
 
   return (
     <$.Card data-testid="character-card">
@@ -83,12 +83,12 @@ export const CharacterCard = () => {
         <CharacterDescription isLoading={isLoading} displayData={displayData} error={error} />
       </$.CharacterCard>
       <CachedCharacters
-        setCachedCharacters={setCachedCharacters}
-        setCharacterId={setCharacterId}
-        setSearchId={setSearchId}
         cachedCharacters={cachedCharacters}
         characterId={characterId}
         searchId={searchId}
+        setSearchId={setSearchId}
+        setCachedCharacters={setCachedCharacters}
+        setCharacterId={setCharacterId}
       />
     </$.Card>
   )

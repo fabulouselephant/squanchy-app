@@ -1,7 +1,7 @@
-import { Stack, Typography, Box, CircularProgress } from '@mui/material'
-import * as $ from './CharactedDescription.styled'
+import { Stack, CircularProgress } from '@mui/material'
 import Image from 'next/image'
 import { ICharacter } from '../../../../types/character'
+import * as $ from './CharactedDescription.styled'
 
 export type TCharacterCard = {
   displayData: ICharacter | undefined
@@ -14,9 +14,9 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
     <Stack data-testid="character-description" direction={{ xs: 'column', md: 'row' }}>
       <$.MainImageContainer>
         {isLoading ? (
-          <Box sx={{ display: 'flex', height: '100%' }}>
+          <$.SpinnerContainer>
             <CircularProgress sx={{ m: 'auto' }} aria-label="Loading…" />
-          </Box>
+          </$.SpinnerContainer>
         ) : (
           <Image
             data-testid="character-image"
@@ -28,12 +28,10 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
         )}
       </$.MainImageContainer>
 
-      <Box sx={{ margin: { xs: '20px 0', md: '50px' }, flex: 1, minWidth: 0 }}>
+      <$.CharacterDescriptionContainer>
         {displayData ? (
           <>
-            <Typography data-testid="character-name" sx={{ fontWeight: 700, fontSize: '32px' }}>
-              {displayData?.name}
-            </Typography>
+            <$.CharacterNameRow data-testid="character-name">{displayData?.name}</$.CharacterNameRow>
             <$.CharacterDescription>
               <$.CharacterDescripionLine greytext>Species</$.CharacterDescripionLine>
               <$.CharacterDescripionLine>{displayData?.species}</$.CharacterDescripionLine>
@@ -62,7 +60,10 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
             </$.CharacterDescription>
             <$.CharacterDescription>
               <$.CharacterDescripionLine greytext>Status</$.CharacterDescripionLine>
-              <$.CharacterDescripionLine sx={{ color: displayData?.status === 'Dead' ? 'red' : 'green' }}>
+              <$.CharacterDescripionLine
+                greytext={displayData?.status === 'unknown'}
+                sx={{ color: displayData?.status === 'Dead' ? 'red' : '' }}
+              >
                 {displayData?.status}
               </$.CharacterDescripionLine>
             </$.CharacterDescription>
@@ -70,7 +71,7 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
         ) : error ? (
           <$.ErrorMessage data-testid="error-message">Character not found</$.ErrorMessage>
         ) : null}
-      </Box>
+      </$.CharacterDescriptionContainer>
     </Stack>
   )
 }

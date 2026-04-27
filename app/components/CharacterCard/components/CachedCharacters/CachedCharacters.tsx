@@ -1,15 +1,14 @@
-import { Stack, Button } from '@mui/material'
-import * as $ from './CachedCharacters.styled'
 import Image from 'next/image'
 import { ICharacter } from '../../../../types/character'
+import * as $ from './CachedCharacters.styled'
 
 export type TCachedCharacters = {
-  setCachedCharacters: React.Dispatch<React.SetStateAction<Record<string, ICharacter>>>
-  setCharacterId: (id: string | null) => void
   setSearchId: (id: string | null) => void
   cachedCharacters: Record<string, ICharacter>
   characterId: string | null
   searchId: string | null
+  setCachedCharacters: React.Dispatch<React.SetStateAction<Record<string, ICharacter>>>
+  setCharacterId: (id: string | null) => void
 }
 
 export const CachedCharacters = ({
@@ -20,18 +19,22 @@ export const CachedCharacters = ({
   searchId,
   characterId,
 }: TCachedCharacters) => {
-  const clearCache = () => {
+  const handleClearCache = () => {
     setCachedCharacters({})
     setCharacterId(null)
     setSearchId(null)
     localStorage.removeItem('character-data')
   }
 
+  const onImageClick = (id: string) => {
+    setCharacterId(String(id))
+    setSearchId(String(id))
+  }
   return (
-    <Stack data-testid="cached-characters" direction={{ sx: 'row', md: 'column', lg: 'column' }} sx={{ mt: 2 }}>
-      <Button data-testid="clear-all-btn" onClick={() => clearCache()} sx={{ fontStyle: 'italic', alignSelf: 'start' }}>
+    <$.CachedCharacters data-testid="cached-characters">
+      <$.ClearAllButton data-testid="clear-all-btn" onClick={handleClearCache}>
         Clear All
-      </Button>
+      </$.ClearAllButton>
       {Object.keys(cachedCharacters).length > 0 && (
         <$.CachedCharactersContainer>
           {Object.values(cachedCharacters).map((character: ICharacter) => (
@@ -42,8 +45,7 @@ export const CachedCharacters = ({
             >
               <Image
                 onClick={() => {
-                  setCharacterId(String(character.id))
-                  setSearchId(String(character.id))
+                  onImageClick(character.id)
                 }}
                 src={character.image}
                 alt="charachter"
@@ -58,6 +60,6 @@ export const CachedCharacters = ({
           ))}
         </$.CachedCharactersContainer>
       )}
-    </Stack>
+    </$.CachedCharacters>
   )
 }

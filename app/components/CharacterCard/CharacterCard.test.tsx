@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { CharacterCard } from './CharacterCard'
+import { ClearAllButton } from './components/CachedCharacters/CachedCharacters.styled'
 
 vi.mock('next/image', () => ({
   default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
@@ -23,13 +24,18 @@ vi.mock('./CharacterCard.styled', () => ({
 vi.mock('./components/CachedCharacters/CachedCharacters.styled', () => ({
   CachedCharactersContainer: ({ children }: any) => <div>{children}</div>,
   CachedCharacter: ({ children }: any) => <div>{children}</div>,
+  ClearAllButton: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  CachedCharacters: ({ children }: any) => <div>{children}</div>,
 }))
 
 vi.mock('./components/CharacterDescription/CharactedDescription.styled', () => ({
   CharacterDescripionLine: ({ children }: any) => <span>{children}</span>,
   CharacterDescription: ({ children }: any) => <div>{children}</div>,
+  CharacterDescriptionContainer: ({ children }: any) => <div>{children}</div>,
   MainImageContainer: ({ children }: any) => <div>{children}</div>,
   ErrorMessage: ({ children }: any) => <p>{children}</p>,
+  SpinnerContainer: ({ children }: any) => <div>{children}</div>,
+  CharacterNameRow: ({ children, ...props }: any) => <span {...props}>{children}</span>,
 }))
 
 const mockCharacter = {

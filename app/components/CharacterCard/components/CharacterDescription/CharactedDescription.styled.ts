@@ -28,3 +28,27 @@ export const ErrorMessage = styled(Typography)({
   fontSize: '32px',
   color: 'red',
 })
+
+export const SpinnerContainer = styled(Box)({
+  display: 'flex',
+  height: '100%',
+})
+
+export const CharacterDescriptionContainer = styled(Box)(({ theme }) => ({
+  flexGrow: 1,
+  minWidth: 0,
+  margin: '50px',
+
+  [theme.breakpoints.down('md')]: {
+    margin: '30px',
+  },
+
+  [theme.breakpoints.down('xs')]: {
+    margin: '20px',
+  },
+}))
+
+export const CharacterNameRow = styled(Typography)({
+  fontWeight: 700,
+  fontSize: '32px',
+})

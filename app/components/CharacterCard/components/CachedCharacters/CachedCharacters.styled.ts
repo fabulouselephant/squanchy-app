@@ -1,6 +1,13 @@
-import { Stack, Box } from '@mui/material'
+import { Stack, Box, Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
+export const CachedCharacters = styled(Stack)(({ theme }) => ({
+  flexDirection: 'column',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'row',
+    marginTop: 2,
+  },
+}))
 export const CachedCharactersContainer = styled(Stack)(({ theme }) => ({
   height: '500px',
   flexDirection: 'column',
@@ -24,3 +31,8 @@ export const CachedCharacter = styled(Box, {
   borderRadius: '5px',
   position: 'relative',
 }))
+
+export const ClearAllButton = styled(Button)({
+  fontStyle: 'italic',
+  alignSelf: 'start',
+})
