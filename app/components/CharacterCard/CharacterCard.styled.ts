@@ -35,7 +35,6 @@ export const ActionBar = styled(Box)(({ theme }) => ({
   },
 }))
 
-
 export const SearchInput = styled(TextField)({
   width: '224px',
   fontSize: '18px',
@@ -48,7 +47,3 @@ export const SearchInputContainer = styled(Box)({
   alignItems: 'center',
   justifyContent: 'space-between',
 })
-
-
-
-

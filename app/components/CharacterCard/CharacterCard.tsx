@@ -4,7 +4,7 @@ import { InputAdornment, Button } from '@mui/material'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { ICharacter } from '../../types/character'
-import {CharacterDescription} from './components/CharacterDescription/CharacterDescription'
+import { CharacterDescription } from './components/CharacterDescription/CharacterDescription'
 import { CachedCharacters } from './components/CachedCharacters/CachedCharacters'
 import * as $ from './CharacterCard.styled'
 
@@ -42,11 +42,10 @@ export const CharacterCard = () => {
     },
   })
 
-
   const displayData: ICharacter | undefined = characterId !== null ? cachedCharacters[characterId] : data
 
   return (
-    <$.Card>
+    <$.Card data-testid="character-card">
       <$.CharacterCard>
         <$.ActionBar>
           <$.SearchInputContainer>
@@ -55,8 +54,10 @@ export const CharacterCard = () => {
               disabled={isLoading}
               value={characterId ?? ''}
               onChange={(e) => {
-                setCharacterId(e.target.value)
-                setSearchId('')
+                if (/^\d*$/.test(e.target.value)) {
+                  setCharacterId(e.target.value)
+                  setSearchId('')
+                }
               }}
               label="Enter any number"
               variant="standard"
@@ -81,7 +82,14 @@ export const CharacterCard = () => {
         </$.ActionBar>
         <CharacterDescription isLoading={isLoading} displayData={displayData} error={error} />
       </$.CharacterCard>
-      <CachedCharacters setCachedCharacters={setCachedCharacters} setCharacterId={setCharacterId} setSearchId={setSearchId} cachedCharacters={cachedCharacters} characterId={characterId} searchId={searchId}/>
+      <CachedCharacters
+        setCachedCharacters={setCachedCharacters}
+        setCharacterId={setCharacterId}
+        setSearchId={setSearchId}
+        cachedCharacters={cachedCharacters}
+        characterId={characterId}
+        searchId={searchId}
+      />
     </$.Card>
   )
 }

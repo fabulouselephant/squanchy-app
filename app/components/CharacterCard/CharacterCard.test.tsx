@@ -4,11 +4,11 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { CharacterCard } from './CharacterCard'
 
 vi.mock('next/image', () => ({
-  default: ({ src, alt, onClick }:any ) => <img src={src} alt={alt} onClick={onClick} />,
+  default: ({ src, alt, onClick }: any) => <img src={src} alt={alt} onClick={onClick} />,
 }))
 
 vi.mock('./CharacterCard.styled', () => ({
-  Card: ({ children }:any) => <div>{children}</div>,
+  Card: ({ children }: any) => <div>{children}</div>,
   CharacterCard: ({ children }: any) => <div>{children}</div>,
   ActionBar: ({ children }: any) => <div>{children}</div>,
   SearchInputContainer: ({ children }: any) => <div>{children}</div>,
@@ -95,15 +95,15 @@ describe('CharachterCard', () => {
 
   test('returns error when there is no character on this id', async () => {
     global.fetch = vi.fn().mockResolvedValue({
-        ok: false,
-        json: () => Promise.resolve({ error: 'Character not found' }),
-      })
-  
-      render(<CharacterCard />, { wrapper })
-  
-      fireEvent.change(screen.getByLabelText('Enter any number'), { target: { value: '18999' } })
-      fireEvent.click(screen.getByTestId('search-btn'))
-  
-      expect(await screen.findByText('Character not found')).toBeInTheDocument()
+      ok: false,
+      json: () => Promise.resolve({ error: 'Character not found' }),
+    })
+
+    render(<CharacterCard />, { wrapper })
+
+    fireEvent.change(screen.getByLabelText('Enter any number'), { target: { value: '18999' } })
+    fireEvent.click(screen.getByTestId('search-btn'))
+
+    expect(await screen.findByText('Character not found')).toBeInTheDocument()
   })
 })
