@@ -1,10 +1,10 @@
 import { Stack, CircularProgress } from '@mui/material'
 import Image from 'next/image'
-import { ICharacter } from '../../../../types/character'
+import { CharacterProps } from '../../../../types/character'
 import * as $ from './CharactedDescription.styled'
 
 export type TCharacterCard = {
-  displayData: ICharacter | undefined
+  displayData: CharacterProps | undefined
   isLoading: boolean
   error: unknown
 }
@@ -19,6 +19,7 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
           </$.SpinnerContainer>
         ) : (
           <Image
+            loading="eager"
             data-testid="character-image"
             src={displayData ? displayData.image : '/rick_and_morty.svg'}
             alt="character"
@@ -69,7 +70,7 @@ export const CharacterDescription = ({ displayData, isLoading, error }: TCharact
             </$.CharacterDescription>
           </>
         ) : error ? (
-          <$.ErrorMessage data-testid="error-message">Character not found</$.ErrorMessage>
+          <$.ErrorMessage data-testid="error-message">{'Character not found'}</$.ErrorMessage>
         ) : null}
       </$.CharacterDescriptionContainer>
     </Stack>

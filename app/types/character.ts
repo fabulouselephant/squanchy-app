@@ -1,4 +1,4 @@
-export interface ICharacter {
+export type CharacterProps = {
   id: string
   name: string
   status: 'Alive' | 'Dead' | 'unknown'

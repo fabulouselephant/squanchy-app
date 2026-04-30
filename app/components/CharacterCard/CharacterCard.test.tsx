@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, test, expect, vi, beforeEach } from 'vitest'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CharacterCard } from './CharacterCard'
 import { ClearAllButton } from './components/CachedCharacters/CachedCharacters.styled'
 
@@ -56,7 +56,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 }
 
-describe('CharachterCard', () => {
+describe('CharacterCard', () => {
   beforeEach(() => {
     localStorage.clear()
     vi.clearAllMocks()

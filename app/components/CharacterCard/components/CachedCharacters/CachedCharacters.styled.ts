@@ -1,3 +1,5 @@
+'use client'
+
 import { Stack, Box, Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
@@ -5,8 +7,8 @@ export const CachedCharacters = styled(Stack)(({ theme }) => ({
   flexDirection: 'column',
   [theme.breakpoints.down('md')]: {
     flexDirection: 'row',
-    marginTop: 2,
   },
+  marginTop: '14px',
 }))
 export const CachedCharactersContainer = styled(Stack)(({ theme }) => ({
   height: '500px',

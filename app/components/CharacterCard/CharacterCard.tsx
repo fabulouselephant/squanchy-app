@@ -1,95 +1,45 @@
 'use client'
 
-import { InputAdornment, Button } from '@mui/material'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
-import { ICharacter } from '../../types/character'
 import { CharacterDescription } from './components/CharacterDescription/CharacterDescription'
 import { CachedCharacters } from './components/CachedCharacters/CachedCharacters'
+import { SearchInput } from './components/SearchInput/SearchInput'
 import * as $ from './CharacterCard.styled'
+import { useCharacterStore } from '@/app/hooks/useCachedCharactersStore'
+import { validateSearchInput } from '@/app/utils/validation'
+import { useUploadData } from '@/app/hooks/useUploadData'
 
 export const CharacterCard = () => {
-  const [cachedCharacters, setCachedCharacters] = useState<Record<string, ICharacter>>(() => {
-    try {
-      const stored = localStorage.getItem('character-data')
-      return stored ? (JSON.parse(stored) as Record<string, ICharacter>) : {}
-    } catch {
-      return {}
-    }
-  })
-
+  const { cachedCharacters } = useCharacterStore()
   const [characterId, setCharacterId] = useState<string | null>(null)
   const [searchId, setSearchId] = useState<string | null>(null)
+  const [_, setValidationError] = useState<string | null>(null)
 
-  const { data, error, isLoading } = useQuery<ICharacter>({
-    queryKey: ['character', searchId],
-    queryFn: () =>
-      fetch(`https://rickandmortyapi.com/api/character/${searchId}`).then((res) => {
-        if (!res.ok) {
-          throw new Error('Character not found')
-        }
-        return res.json()
-      }),
-    enabled: !!searchId && !cachedCharacters[searchId],
-    onSuccess: (fetchedData) => {
-      if (searchId && fetchedData) {
-        setCachedCharacters((prev) => {
-          const updated = { ...prev, [searchId]: fetchedData }
-          localStorage.setItem('character-data', JSON.stringify(updated))
-          return updated
-        })
-      }
-    },
-  })
-
-  const displayData = characterId !== null ? cachedCharacters[characterId] : data
+  const { data, isLoading, error } = useUploadData(searchId)
+  const displayData = characterId ? (cachedCharacters[characterId] ?? data) : data
 
   return (
     <$.Card data-testid="character-card">
       <$.CharacterCard>
         <$.ActionBar>
-          <$.SearchInputContainer>
-            <$.SearchInput
-              data-testid="search-input"
-              disabled={isLoading}
-              value={characterId ?? ''}
-              onChange={(e) => {
-                if (/^\d*$/.test(e.target.value)) {
-                  setCharacterId(e.target.value)
-                  setSearchId('')
-                }
-              }}
-              label="Enter any number"
-              variant="standard"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Button
-                        data-testid="search-btn"
-                        variant="text"
-                        onClick={() => setSearchId(characterId)}
-                        disabled={isLoading}
-                      >
-                        Search
-                      </Button>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </$.SearchInputContainer>
+          <SearchInput
+            value={characterId ?? ''}
+            isLoading={isLoading}
+            onChange={setCharacterId}
+            onSearch={() => {
+              const error = validateSearchInput(characterId)
+              if (error) {
+                setValidationError(error)
+              } else {
+                setValidationError(null)
+                setSearchId(characterId)
+              }
+            }}
+          />
         </$.ActionBar>
         <CharacterDescription isLoading={isLoading} displayData={displayData} error={error} />
       </$.CharacterCard>
-      <CachedCharacters
-        cachedCharacters={cachedCharacters}
-        characterId={characterId}
-        searchId={searchId}
-        setSearchId={setSearchId}
-        setCachedCharacters={setCachedCharacters}
-        setCharacterId={setCharacterId}
-      />
+      <CachedCharacters cachedCharacters={cachedCharacters} characterId={characterId} setCharacterId={setCharacterId} />
     </$.Card>
   )
 }

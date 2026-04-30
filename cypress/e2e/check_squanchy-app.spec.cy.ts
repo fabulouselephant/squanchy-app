@@ -1,4 +1,4 @@
-import { CharacterCardPO } from "../../app/components/CharacterCard/CharachterCard.po"
+import { CharacterCardPO } from "../../app/components/CharacterCard/CharacterCard.po"
 import { CharacterDecriptionPO } from '../../app/components/CharacterCard/components/CharacterDescription/CharacterDescription.po'
 import  {CachedCharactersPO} from '../../app/components/CharacterCard/components/CachedCharacters/CachedCharacters.po'
 

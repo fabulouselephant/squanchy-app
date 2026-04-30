@@ -12,7 +12,7 @@ const ptSans = PT_Sans({
 
 export const metadata: Metadata = {
   title: 'Squanchy App',
-  description: 'Created to see all the  fantastic characters in Rick & Morty series',
+  description: 'Created to see all the fantastic characters in Rick & Morty series',
 }
 
 export default function RootLayout({
