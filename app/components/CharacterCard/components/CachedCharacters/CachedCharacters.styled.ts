@@ -14,6 +14,9 @@ export const CachedCharactersContainer = styled(Stack)(({ theme }) => ({
   height: '500px',
   flexDirection: 'column',
   overflow: 'scroll',
+  '&::-webkit-scrollbar': {
+      display: 'none', 
+    },
   [theme.breakpoints.down('md')]: {
     flexDirection: 'row',
     width: '100%',
